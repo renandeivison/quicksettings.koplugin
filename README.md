@@ -8,7 +8,7 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 ---
 
-## 📌 Disclaimer & Purpose
+## Disclaimer & Purpose
 
 > **Note:** This plugin was originally put together purely for my **personal use** to streamline my own e-reader workflow. It is being shared publicly here because members of the community asked for it. 
 > 
@@ -16,7 +16,7 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 ---
 
-## 🚀 Features
+## Features
 
 *   **Integrated Panel:** Combines your main navigation bar, quick toggle buttons, and frontlight sliders into a single unified menu view.
 *   **ZenUI Sliders:** Upgrades the native KOReader frontlight/warmth bars with smooth, gesture-friendly pill-and-circle sliders.
@@ -26,21 +26,21 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 ---
 
-## 🛠️ Installation
+## Installation
 
 1.  **Download the plugin:** Copy the `main.lua` file from this repository.
 2.  **Access your device directory:** Connect your e-reader to your computer via USB, or use an SSH/SFTP connection.
 3.  **Navigate to the plugins folder:** Go to the KOReader internal directory:
-```bash
+
     koreader/plugins/
-    ```
+
 4.  **Create a plugin folder:** Create a new folder named `quicksettings.koplugin`:
-```bash
+
     koreader/plugins/quicksettings.koplugin/
-    ```
+
 5.  **Place the file:** Paste the `main.lua` file inside that folder.
 
-> ⚠️ **IMPORTANT ICON NOTE:** 
+> **IMPORTANT ICON NOTE:** 
 > * **If you are already using ZenUI:** The plugin tab icon will automatically be pulled from ZenUI. No extra steps are required.
 > * **If you are NOT using ZenUI:** You **must** manually place an icon file named `quicksettings.svg` into your KOReader icons directory (`koreader/icons/`). Otherwise, the menu tab icon will not display correctly.
 
@@ -48,7 +48,7 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Once installed, you can configure the plugin directly within KOReader:
 1. Open the top menu in KOReader.
@@ -61,7 +61,7 @@ Once installed, you can configure the plugin directly within KOReader:
 
 ---
 
-## 🤝 Credits & Acknowledgments
+## Credits & Acknowledgments
 
 This plugin would not be possible without the hard work of the original developers:
 *   **AnthonyGress** for the beautiful [ZenUI slider engine](https://github.com/AnthonyGress/zen_ui.koplugin) implementation.
