@@ -40,9 +40,9 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 5.  **Place the file:** Paste the `main.lua` file inside that folder.
 
- **IMPORTANT TAB ICON NOTE:** 
+> ⚠️ **IMPORTANT TAB ICON NOTE:** 
 > * **If you are already using ZenUI:** The plugin tab icon will automatically be pulled from ZenUI. No extra steps are required.
-> * **If you are NOT using ZenUI:** You **must** manually place an icon file named `quicksettings.svg` into your KOReader icons directory (`koreader/icons/`). Otherwise, the main menu tab icon will not display correctly.
+> * **If you are NOT using ZenUI:** You **must** manually place an icon file named `quicksettings.svg` or `quicksettings.png` into your KOReader icons directory (`koreader/icons/`). Otherwise, the main menu tab icon will not display correctly.
 
 6.  **Restart KOReader:** Safely eject your device or restart the KOReader software.
 
@@ -50,28 +50,28 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 ## Icons Reference
 
-If any specific button icon does not show up on your interface, it means your current KOReader setup or theme is missing that asset. You can fix this manually by adding the missing `.svg` file to your `koreader/icons/` directory using the following exact filenames:
+If any specific button icon does not show up on your interface, it means your current KOReader setup or theme is missing that asset. Because **KOReader supports both `.svg` and `.png` image extensions**, you can fix this manually by adding the missing file to your `koreader/icons/` directory using the following exact base names:
 
-| Feature / Button | Required SVG Filename |
+| Feature / Button | Required Asset Filename (Use `.svg` or `.png`) |
 | :--- | :--- |
-| **Wi-Fi** | `quick_wifi.svg` |
-| **Night Mode** | `quick_nightmode.svg` |
-| **Rotate** | `quick_rotate.svg` |
-| **USB** | `quick_usb.svg` |
-| **Restart** | `quick_restart.svg` |
-| **Exit** | `quick_exit.svg` |
-| **Sleep** | `quick_sleep.svg` |
-| **Search** | `quick_search.svg` |
-| **Cloud** | `quick_cloud.svg` |
-| **Z-Library** | `quick_zlib.svg` |
-| **Calibre Search** | `quick_search.svg` |
-| **Calibre** | `quick_calibre.svg` |
-| **Streak** | `quick_streak.svg` |
-| **LocalSend** | `quick_localsend.svg` |
-| **File Browser** | `quick_filebrowser.svg` |
-| **Reading Progress** | `quick_stats_progress.svg` |
-| **Reading Calendar** | `quick_stats_calendar.svg` |
-| **Battery Stats** | `quick_battery.svg` |
+| **Wi-Fi** | `quick_wifi` |
+| **Night Mode** | `quick_nightmode` |
+| **Rotate** | `quick_rotate` |
+| **USB** | `quick_usb` |
+| **Restart** | `quick_restart` |
+| **Exit** | `quick_exit` |
+| **Sleep** | `quick_sleep` |
+| **Search** | `quick_search` |
+| **Cloud** | `quick_cloud` |
+| **Z-Library** | `quick_zlib` |
+| **Calibre Search** | `quick_search` |
+| **Calibre** | `quick_calibre` |
+| **Streak** | `quick_streak` |
+| **LocalSend** | `quick_localsend` |
+| **File Browser** | `quick_filebrowser` |
+| **Reading Progress** | `quick_stats_progress` |
+| **Reading Calendar** | `quick_stats_calendar` |
+| **Battery Stats** | `quick_battery` |
 
 ---
 
