@@ -779,8 +779,11 @@ function QuickSettingsPlugin:init()
     ReaderMenu._getTabIndexFromLocation = function(self, ges) return self.last_tab_index end
     FileManagerMenu._getTabIndexFromLocation = function(self, ges) return self.last_tab_index end
 
-    local quick_settings_tab = { icon = "quicksettings", remember = false, panel = createQuickSettingsPanel }
-
+    local quick_settings_tab = { 
+        icon = "plugins/quicksettings.koplugin/icons/quicksettings", 
+        remember = false, 
+        panel = createQuickSettingsPanel 
+    }
     local function buildSettingsMenu()
         local button_toggle_items = {}
         for _, id in ipairs(config_default.button_order) do
