@@ -537,7 +537,7 @@ function QuickSettingsPlugin:init()
         local refs = { buttons = {}, sliders = {} }
         local visible_buttons = {}
         
-        -- RIGID LOCK: Ensures a maximum of 7 buttons in a single horizontal row
+        -- HARD LOCK: Ensures a maximum of 7 buttons in the single horizontal row
         local max_allowed = 7 
         for _, id in ipairs(config.button_order) do
             if config.show_buttons[id] and button_defs[id] then
@@ -557,9 +557,9 @@ function QuickSettingsPlugin:init()
         local label_font = Font:getFace("xx_smallinfofont", 15)
         local normal_border = Screen:scaleBySize(2)
 
-        -- REMOVED: Extra artificial spacing zeroed out
+        -- REMOVED: Artificial extra spacing zeroed out
         local btn_gap = 0 
-        -- LOCKED COLUMN WIDTH: Controls perfect proximity between circles
+        -- LOCKED COLUMN WIDTH: Controls the perfect spacing between the circles
         local fixed_col_width = action_btn_size + Screen:scaleBySize(16) 
 
         local function makeActionButton(icon_name, label_text, active, dim)
@@ -717,7 +717,7 @@ function QuickSettingsPlugin:init()
     local orig_onTapCloseAllMenus = TouchMenu.onTapCloseAllMenus
     function TouchMenu:onTapCloseAllMenus(arg, ges_ev)
         if self._qs_refs and self.item_table and self.item_table.panel then
-            if self._qs_slider_locked_ locked then return true end
+            if self._qs_slider_locked then return true end
             if handlePanelGesture(self, ges_ev, false) then return true end
         end
         return orig_onTapCloseAllMenus(self, arg, ges_ev)
