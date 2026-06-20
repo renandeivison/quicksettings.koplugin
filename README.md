@@ -40,7 +40,7 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 5.  **Place the file:** Paste the `main.lua` file inside that folder.
 
-> ⚠️ **IMPORTANT TAB ICON NOTE:** 
+> **IMPORTANT TAB ICON NOTE:** 
 > * **If you are already using ZenUI:** The plugin tab icon will automatically be pulled from ZenUI. No extra steps are required.
 > * **If you are NOT using ZenUI:** You **must** manually place an icon file named `quicksettings.svg` or `quicksettings.png` into your KOReader icons directory (`koreader/icons/`). Otherwise, the main menu tab icon will not display correctly.
 
@@ -48,9 +48,11 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 ---
 
-## Icons Reference
+## Icons Reference & Customization
 
-If any specific button icon does not show up on your interface, it means your current KOReader setup or theme is missing that asset. Because **KOReader supports both `.svg` and `.png` image extensions**, you can fix this manually by adding the missing file to your `koreader/icons/` directory using the following exact base names:
+If any specific button icon does not show up on your interface, it means your current KOReader setup or theme is missing that asset. 
+
+Because **KOReader supports both `.svg` and `.png` image extensions**, you can fix this manually by adding the files to your `koreader/icons/` directory. **You can also use this to completely customize the interface with your own custom icons!** Simply create or download your preferred design, rename it to match the exact base name below, and drop it in the folder:
 
 | Feature / Button | Required Asset Filename (Use `.svg` or `.png`) |
 | :--- | :--- |
