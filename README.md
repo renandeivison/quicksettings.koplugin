@@ -8,7 +8,7 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 ---
 
-## 📌 Disclaimer & Purpose
+## Disclaimer & Purpose
 
 > **Note:** This plugin was originally put together purely for my **personal use** to streamline my own e-reader workflow. It is being shared publicly here because members of the community asked for it. 
 > 
@@ -16,7 +16,7 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 ---
 
-## 🚀 Features
+## Features
 
 *   **Integrated Panel:** Combines your main navigation bar, quick toggle buttons, and frontlight sliders into a single unified menu view.
 *   **ZenUI Sliders:** Upgrades the native KOReader frontlight/warmth bars with smooth, gesture-friendly pill-and-circle sliders.
@@ -26,7 +26,7 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 ---
 
-## 🛠️ Installation
+## Installation
 
 1.  **Download the plugin:** Copy the `main.lua` file from this repository.
 2.  **Access your device directory:** Connect your e-reader to your computer via USB, or use an SSH/SFTP connection.
@@ -43,7 +43,7 @@ This project is a hybrid merge of two excellent community resources, compiled an
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Once installed, you can configure the plugin directly within KOReader:
 1. Open the top menu in KOReader.
@@ -56,7 +56,7 @@ Once installed, you can configure the plugin directly within KOReader:
 
 ---
 
-## 🤝 Credits & Acknowledgments
+## Credits & Acknowledgments
 
 This plugin would not be possible without the hard work of the original developers:
 *   **AnthonyGress** for the beautiful [ZenUI slider engine](https://github.com/AnthonyGress/zen_ui.koplugin) implementation.
