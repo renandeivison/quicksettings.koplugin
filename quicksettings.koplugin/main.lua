@@ -19,6 +19,7 @@ local UIManager = require("ui/uimanager")
 local VerticalGroup = require("ui/widget/verticalgroup")
 local VerticalSpan = require("ui/widget/verticalspan")
 local _ = require("gettext")
+local util = require("util")
 local Screen = Device.screen
 local Dispatcher = require("dispatcher")
 
@@ -27,25 +28,7 @@ local QuickSettingsPlugin = WidgetContainer:extend{
 }
 
 -- ============================================================
--- Utility
--- ============================================================
-local function deepcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[deepcopy(orig_key)] = deepcopy(orig_value)
-        end
-        setmetatable(copy, deepcopy(getmetatable(orig)))
-    else
-        copy = orig
-    end
-    return copy
-end
-
--- ============================================================
--- ZenSlider Engine (Natively injected)
+-- ZenSlider Engine (Nativamente injetado)
 -- ============================================================
 local ZenSlider = {}
 ZenSlider.__index = ZenSlider
@@ -258,7 +241,7 @@ function ZenSlider.installTouchMenuHooks(TouchMenu, opts)
 end
 
 -- ============================================================
--- Main Plugin Initialization
+-- Inicialização Principal do Plugin
 -- ============================================================
 
 function QuickSettingsPlugin:init()
@@ -272,45 +255,76 @@ function QuickSettingsPlugin:init()
         },
         show_frontlight = true,
         show_warmth = true,
+        show_available_networks = true,
         custom_buttons = {},
         next_custom_id = 0,
     }
 
     local config = G_reader_settings:readSetting("quick_settings_plugin", {})
     for k, v in pairs(config_default) do
-        if config[k] == nil then config[k] = deepcopy(v) end
+        if config[k] == nil then config[k] = util.tableDeepCopy(v) end
     end
-    if type(config.show_buttons) ~= "table" then config.show_buttons = deepcopy(config_default.show_buttons) end
-    if type(config.button_order) ~= "table" then config.button_order = deepcopy(config_default.button_order) end
+    if type(config.show_buttons) ~= "table" then config.show_buttons = util.tableDeepCopy(config_default.show_buttons) end
+    if type(config.button_order) ~= "table" then config.button_order = util.tableDeepCopy(config_default.button_order) end
 
     local function saveConfig()
         G_reader_settings:saveSetting("quick_settings_plugin", config)
     end
 
-    local function hasPlugin(slot)
-        local ok_f, FM = pcall(require, "apps/filemanager/filemanager")
-        local ok_r, RU = pcall(require, "apps/reader/readerui")
-        local ui = (ok_f and FM.instance) or (ok_r and RU.instance)
-        return ui == nil or ui[slot] ~= nil
+    -- Detecção de plugins otimizada baseada no sistema de arquivos do KOReader
+    local function hasPlugin(name)
+        if G_reader_settings:isTrue("plugin_" .. name .. "_enabled") then return true end
+        local path = "plugins/" .. name .. ".koplugin/main.lua"
+        local f = io.open(path, "r")
+        if f then f:close() return true end
+        return false
     end
+
+    -- Estado local para feedback transicional
+    local _toggling_wifi = false
 
     local button_defs = {
         wifi = {
             icon = "quick_wifi", label = _("Wi-Fi"),
             label_func = function()
+                if _toggling_wifi then
+                    return NetworkMgr:isWifiOn() and _("Disconnecting...") or _("Connecting...")
+                end
                 if NetworkMgr:isWifiOn() then
                     local net = NetworkMgr:getCurrentNetwork()
                     if net and net.ssid then return net.ssid end
                 end
                 return _("Wi-Fi")
             end,
-            active_func = function() return NetworkMgr:isWifiOn() end,
+            active_func = function() return NetworkMgr:isWifiOn() and not _toggling_wifi end,
+            disabled_func = function() return _toggling_wifi end,
             callback = function(touch_menu)
-                if NetworkMgr:isWifiOn() then NetworkMgr:toggleWifiOff() else NetworkMgr:toggleWifiOn() end
-                UIManager:scheduleIn(1, function() if touch_menu.item_table and touch_menu.item_table.panel then touch_menu:updateItems(1) end end)
+                _toggling_wifi = true
+                touch_menu:updateItems(1)
+                
+                local function onFinish()
+                    _toggling_wifi = false
+                    if touch_menu.item_table and touch_menu.item_table.panel then 
+                        touch_menu:updateItems(1) 
+                    end
+                end
+                
+                if NetworkMgr:isWifiOn() then 
+                    NetworkMgr:toggleWifiOff(onFinish, true) 
+                else 
+                    -- Aqui passamos a configuração de exibir a rede (terceiro parâmetro)
+                    NetworkMgr:toggleWifiOn(onFinish, config.show_available_networks, true) 
+                end
             end,
             hold_callback = function(touch_menu)
-                local function do_connect() NetworkMgr:toggleWifiOn(function() UIManager:scheduleIn(0.5, function() if touch_menu.item_table and touch_menu.item_table.panel then touch_menu:updateItems(1) end end) end, true, true) end
+                _toggling_wifi = true
+                touch_menu:updateItems(1)
+                local function do_connect() 
+                    NetworkMgr:toggleWifiOn(function() 
+                        _toggling_wifi = false
+                        if touch_menu.item_table and touch_menu.item_table.panel then touch_menu:updateItems(1) end 
+                    end, config.show_available_networks, true) 
+                end
                 if NetworkMgr:isWifiOn() then NetworkMgr:toggleWifiOff(function() do_connect() end, true) else do_connect() end
             end,
         },
@@ -390,7 +404,7 @@ function QuickSettingsPlugin:init()
     }
 
     -- ============================================================
-    -- Brightness and Warmth Builders
+    -- Construtores de Sliders (Brilho e Temperatura)
     -- ============================================================
     local function build_brightness_slider(touch_menu, opts)
         local fl = { min = opts.powerd.fl_min, max = opts.powerd.fl_max, cur = opts.powerd:frontlightIntensity() }
@@ -526,7 +540,7 @@ function QuickSettingsPlugin:init()
     end
 
     -- ============================================================
-    -- Panel creation 
+    -- Criação do Painel Dinâmico Multifileiras
     -- ============================================================
     local function createQuickSettingsPanel(touch_menu)
         local panel_width = touch_menu.item_width
@@ -537,29 +551,19 @@ function QuickSettingsPlugin:init()
         local refs = { buttons = {}, sliders = {} }
         local visible_buttons = {}
         
-        -- HARD LOCK: Ensures a maximum of 7 buttons in the single horizontal row
-        local max_allowed = 7 
         for _, id in ipairs(config.button_order) do
             if config.show_buttons[id] and button_defs[id] then
                 local def = button_defs[id]
                 if not def.visible_func or def.visible_func() then 
                     table.insert(visible_buttons, { id = id, def = def })
-                    if #visible_buttons >= max_allowed then
-                        break
-                    end
                 end
             end
         end
 
-        local num_buttons = #visible_buttons
         local action_btn_size = Screen:scaleBySize(64)
         local icon_size = math.floor(action_btn_size * 0.5)
         local label_font = Font:getFace("xx_smallinfofont", 15)
         local normal_border = Screen:scaleBySize(2)
-
-        -- REMOVED: Artificial extra spacing zeroed out
-        local btn_gap = 0 
-        -- LOCKED COLUMN WIDTH: Controls the perfect spacing between the circles
         local fixed_col_width = action_btn_size + Screen:scaleBySize(16) 
 
         local function makeActionButton(icon_name, label_text, active, dim)
@@ -582,11 +586,22 @@ function QuickSettingsPlugin:init()
             return VerticalGroup:new{ align = "center", circle, VerticalSpan:new{ width = Screen:scaleBySize(2) }, label_box }, circle
         end
 
-        local top_row = HorizontalGroup:new{ align = "center" }
+        local panel = VerticalGroup:new{ align = "center", VerticalSpan:new{ width = Screen:scaleBySize(8) } }
         refs.button_layout_row = {}
 
-        if num_buttons > 0 then
-            for i, entry in ipairs(visible_buttons) do
+        -- Distribuição dinâmica dos botões em múltiplas fileiras baseada no espaço livre
+        if #visible_buttons > 0 then
+            local current_row = HorizontalGroup:new{ align = "center" }
+            local current_w = 0
+
+            for _, entry in ipairs(visible_buttons) do
+                if current_w + fixed_col_width > inner_width and current_w > 0 then
+                    table.insert(panel, CenterContainer:new{ dimen = Geom:new{ w = panel_width, h = current_row:getSize().h }, current_row })
+                    table.insert(panel, VerticalSpan:new{ width = Screen:scaleBySize(10) })
+                    current_row = HorizontalGroup:new{ align = "center" }
+                    current_w = 0
+                end
+
                 local def = entry.def
                 local label_text = def.label_func and def.label_func() or def.label
                 local active   = def.active_func   and def.active_func()   or false
@@ -595,11 +610,14 @@ function QuickSettingsPlugin:init()
 
                 table.insert(refs.buttons, { widget = btn_circle, callback = not disabled and function() def.callback(touch_menu) end or nil, hold_callback = def.hold_callback and function() def.hold_callback(touch_menu) end or nil })
                 table.insert(refs.button_layout_row, btn_circle)
-                table.insert(top_row, btn_widget)
                 
-                if i < num_buttons and btn_gap > 0 then 
-                    table.insert(top_row, HorizontalSpan:new{ width = btn_gap }) 
-                end
+                table.insert(current_row, btn_widget)
+                current_w = current_w + fixed_col_width
+            end
+
+            if current_w > 0 then
+                table.insert(panel, CenterContainer:new{ dimen = Geom:new{ w = panel_width, h = current_row:getSize().h }, current_row })
+                table.insert(panel, VerticalSpan:new{ width = Screen:scaleBySize(8) })
             end
         end
 
@@ -609,19 +627,14 @@ function QuickSettingsPlugin:init()
         local slider_gap = Screen:scaleBySize(4)
         local slider_opts = { inner_width = inner_width, slider_width = inner_width - 2 * small_btn_width - 2 * slider_gap, small_btn_width = small_btn_width, slider_gap = slider_gap, medium_font = medium_font, small_btn_size = small_btn_size, powerd = powerd, refs = refs, show_parent = touch_menu.show_parent }
 
-        local fl_group = VerticalGroup:new{ align = "center" }
-        if config.show_frontlight and Device:hasFrontlight() then fl_group = build_brightness_slider(touch_menu, slider_opts) end
-
-        local warmth_group = VerticalGroup:new{ align = "center" }
-        if config.show_warmth and Device:hasNaturalLight() then warmth_group = build_warmth_slider(touch_menu, slider_opts) end
-
-        local panel = VerticalGroup:new{ align = "center", VerticalSpan:new{ width = Screen:scaleBySize(8) } }
-        if num_buttons > 0 then
-            table.insert(panel, CenterContainer:new{ dimen = Geom:new{ w = panel_width, h = top_row:getSize().h }, top_row })
-            table.insert(panel, VerticalSpan:new{ width = Screen:scaleBySize(8) })
+        if config.show_frontlight and Device:hasFrontlight() then 
+            table.insert(panel, build_brightness_slider(touch_menu, slider_opts)) 
         end
-        if #fl_group > 0 then table.insert(panel, fl_group) end
-        if #warmth_group > 0 then table.insert(panel, warmth_group) end
+
+        if config.show_warmth and Device:hasNaturalLight() then 
+            table.insert(panel, build_warmth_slider(touch_menu, slider_opts)) 
+        end
+
         table.insert(panel, VerticalSpan:new{ width = Screen:scaleBySize(8) })
 
         touch_menu._qs_refs = refs
@@ -644,7 +657,7 @@ function QuickSettingsPlugin:init()
     end
 
     -- ============================================================
-    -- KOReader System Hooks
+    -- Hooks de Sistema do KOReader
     -- ============================================================
     local TouchMenu = require("ui/widget/touchmenu")
     local FocusManager = require("ui/widget/focusmanager")
@@ -794,6 +807,7 @@ function QuickSettingsPlugin:init()
                 { text = _("Buttons"), sub_item_table = button_toggle_items },
                 { text = _("Show brightness slider"), checked_func = function() return config.show_frontlight end, callback = function() config.show_frontlight = not config.show_frontlight; saveConfig() end },
                 { text = _("Show warmth slider"), checked_func = function() return config.show_warmth end, callback = function() config.show_warmth = not config.show_warmth; saveConfig() end, separator = true },
+                { text = _("Show available networks when turning on Wi-Fi"), checked_func = function() return config.show_available_networks end, callback = function() config.show_available_networks = not config.show_available_networks; saveConfig() end },
                 { text = _("Always open on this tab"), checked_func = function() return config.open_on_start end, callback = function() config.open_on_start = not config.open_on_start; saveConfig() end },
             },
         }
