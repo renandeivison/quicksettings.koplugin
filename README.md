@@ -75,8 +75,8 @@ You can easily completely customize the button interface with your own custom ic
 | Button ID / Asset Name | Linked Feature / Core Plugin Dependency | Action Behavior |
 | :--- | :--- | :--- |
 | `quick_wifi` | Core Wi-Fi Toggle | Switches Wi-Fi State (Optional Network List prompt) |
-| `quick_frontlight` | Core Frontlight Switch *(Hardware Dependent)* | Toggles the screen frontlight on or off entirely |
-| `quick_autorotate` | Core Auto-Rotation *(Hardware Dependent)* | Toggles the device's automatic screen rotation sensor |
+| `lightbulb` | Core Frontlight Switch *(Hardware Dependent)* | Toggles the screen frontlight on or off entirely |
+| `quick_rotation` | Core Auto-Rotation *(Hardware Dependent)* | Toggles the device's automatic screen rotation sensor |
 | `quick_nightmode`| Core Night Mode | Toggles E-Ink Night Mode colors |
 | `quick_rotate` | Core Screen Rotation | Cycles display rotation manually |
 | `quick_usb` | Core USB Mass Storage | Launches USB connection screen |
