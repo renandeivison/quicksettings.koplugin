@@ -35,14 +35,6 @@ This project is a hybrid merge of two excellent community resources, compiled, r
 *   **Robust Environment Compatibility:** Re-engineered internal plugin detection paths to work seamlessly across all platforms, including Kindle devices where working directories vary from the KOReader root.
 *   **Native Customization Menu:** Injects seamlessly into KOReader's native settings menu (`Settings -> Quick settings`), allowing you to toggle slider visibility, enforce opening defaults, and reorder your button layout via a drag-and-drop sort widget.
 
-### Preview
-
-<!-- Replace these placeholder paths with the actual paths to your images once uploaded to GitHub -->
-<p align="center">
-  <img src="images/panel_preview.png" alt="Quick Settings Panel Preview" width="400"/>
-  <img src="images/settings_preview.png" alt="Customization Menu Preview" width="400"/>
-</p>
-
 ---
 
 ## Installation & Upgrading
