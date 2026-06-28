@@ -22,7 +22,7 @@ This project is a hybrid merge of two excellent community resources, compiled, r
 > 
 > As a personal project maintained in my spare time, it is provided "as-is." While you are more than welcome to use, fork, or modify it, please keep in mind that official support or frequent updates are not guaranteed.
 
-> **Tested Device:** This plugin was developed and tested exclusively on a **Kindle Paperwhite 11/12 Signature Edition**. While it is designed to be compatible with other devices running KOReader, performance and layout rendering on other hardware cannot be guaranteed.
+ **Tested Device:** This plugin was developed and tested exclusively on a **Kindle Paperwhite 11/12 Signature Edition**. While it is designed to be compatible with other devices running KOReader, performance and layout rendering on other hardware cannot be guaranteed.
 
 ---
 
@@ -31,29 +31,30 @@ This project is a hybrid merge of two excellent community resources, compiled, r
 *   **Integrated Panel:** Combines your main navigation bar, quick toggle buttons, and frontlight sliders into a single unified menu view.
 *   **ZenUI Sliders:** Upgrades the native KOReader frontlight/warmth bars with smooth, gesture-friendly pill-and-circle sliders.
 *   **Dynamic Grid Layout:** Displays a perfectly proportioned single row when you select up to 7 buttons. If you enable more than 7 items, the plugin automatically adds new rows to accommodate your selection cleanly.
-*   **Smart Plugin Autodetection:** Optional buttons are automatically hidden unless their corresponding plugins are actually installed on your device, preventing interface clutter.
+*   **Smart Hardware & Plugin Autodetection:** Optional buttons are hidden automatically unless their dependencies are met. Buttons for external plugins require those plugins to be installed, while specific hardware toggles (like frontlight and auto-rotation) only appear on devices that physically support those features.
 *   **Robust Environment Compatibility:** Re-engineered internal plugin detection paths to work seamlessly across all platforms, including Kindle devices where working directories vary from the KOReader root.
 *   **Native Customization Menu:** Injects seamlessly into KOReader's native settings menu (`Settings -> Quick settings`), allowing you to toggle slider visibility, enforce opening defaults, and reorder your button layout via a drag-and-drop sort widget.
 
-> **Important Note on Core/External Plugins:** This plugin does **not** bundle any third-party tools or games (like Chess, Crossword, QuickRSS, etc.). It only acts as a control panel shortcut to trigger them. All dependent plugins must be downloaded and installed separately on your device for their respective buttons to appear.
+ **Important Note on Core/External Plugins:** This plugin does **not** bundle any third-party tools or games (like Chess, Crossword, QuickRSS, etc.). It only acts as a control panel shortcut to trigger them. All dependent plugins must be downloaded and installed separately on your device for their respective buttons to appear.
+
 
 ---
 
-## Installation & Upgrading
+## 🛠️ Installation & Upgrading
 
 1.  **Download the plugin:** Download the latest version of this repository.
 2.  **Access your device directory:** Connect your e-reader to your computer via USB, or use an SSH/SFTP connection.
 3.  **Navigate to the plugins folder:** Go to the KOReader internal directory:
-   
+    ```bash
     koreader/plugins/
-   
+    ```
 4.  **Create/Replace the plugin folder:** Ensure your folder is named exactly `quicksettings.koplugin`:
-   
+    ```bash
     koreader/plugins/quicksettings.koplugin/
-   
+    ```
 5.  **Place the files:** Paste the `main.lua` file **and the accompanying `icons/` folder** inside `quicksettings.koplugin/`.
 
->  **IMPORTANT TAB ICON NOTE:** 
+> **IMPORTANT TAB ICON NOTE:** 
 > * **If you are already using ZenUI:** The main plugin tab icon will automatically be pulled from ZenUI. No extra steps are required.
 > * **If you are NOT using ZenUI:** You **must** manually place an icon file into your KOReader icons directory at `/koreader/icons/quicksettings.svg` or `/koreader/icons/quicksettings.png`. Otherwise, the main menu tab icon will not display correctly.
 
@@ -74,8 +75,10 @@ You can easily completely customize the button interface with your own custom ic
 | Button ID / Asset Name | Linked Feature / Core Plugin Dependency | Action Behavior |
 | :--- | :--- | :--- |
 | `quick_wifi` | Core Wi-Fi Toggle | Switches Wi-Fi State (Optional Network List prompt) |
+| `quick_frontlight` | Core Frontlight Switch *(Hardware Dependent)* | Toggles the screen frontlight on or off entirely |
+| `quick_autorotate` | Core Auto-Rotation *(Hardware Dependent)* | Toggles the device's automatic screen rotation sensor |
 | `quick_nightmode`| Core Night Mode | Toggles E-Ink Night Mode colors |
-| `quick_rotate` | Core Screen Rotation | Cycles display rotation |
+| `quick_rotate` | Core Screen Rotation | Cycles display rotation manually |
 | `quick_usb` | Core USB Mass Storage | Launches USB connection screen |
 | `quick_restart` | Core System Action | Restarts KOReader |
 | `quick_exit` | Core System Action | Exits KOReader |
@@ -85,22 +88,22 @@ You can easily completely customize the button interface with your own custom ic
 | `quick_zlib` | Z-Library Plugin | Launches local Z-Library portal |
 | `quick_calibre` | Calibre Plugin | Launches Calibre connection menu |
 | `quick_streak` | Reading Streak Plugin | Reviews your daily reading metrics |
-| `quick_filebrowserplus` | filebrowserplus.koplugin | Toggles server state and reads local PID runtime files |
+| `quick_filebrowserplus` | `filebrowserplus.koplugin` | Toggles server state and reads local PID runtime files |
 | `quick_stats_progress` | Core Reading Statistics | Direct path to your reading progress |
 | `quick_stats_calendar` | Core Reading Statistics | Direct path to your reading history calendar |
 | `quick_battery` | Core Battery Module | Reviews battery lifecycle diagnostics |
-| `quickrss` | quickrss.koplugin | Launches direct Feed View via core UI modules |
-| `opds` | opds.koplugin | Broadcasts standard `ShowOPDSCatalog` dispatch event |
-| `puzzles` | slidepuzzle.koplugin | Launches standard `SlidePuzzleOpen` overlay |
-| `crossword` | crossword.koplugin | Broadcasts native Dispatcher `CrosswordMenu` menu event |
-| `connections` | connections.koplugin | Invokes the NYT Connections `addToMainMenu` callback |
-| `chess` | chess.koplugin | Dispatches the native `KochessStart` event loop |
-| `casual_chess` | casualkochess.koplugin | Dispatches the native `CasualChessStart` event loop |
-| `kosync` | kosync.koplugin | Forces a background sync via the active running instance |
+| `quickrss` | `quickrss.koplugin` | Launches direct Feed View via core UI modules |
+| `opds` | `opds.koplugin` | Broadcasts standard `ShowOPDSCatalog` dispatch event |
+| `puzzles` | `slidepuzzle.koplugin` | Launches standard `SlidePuzzleOpen` overlay |
+| `crossword` | `crossword.koplugin` | Broadcasts native Dispatcher `CrosswordMenu` menu event |
+| `connections` | `connections.koplugin` | Invokes the NYT Connections `addToMainMenu` callback |
+| `chess` | `chess.koplugin` | Dispatches the native `KochessStart` event loop |
+| `casual_chess` | `casualkochess.koplugin` | Dispatches the native `CasualChessStart` event loop |
+| `kosync` | `kosync.koplugin` | Forces a background sync via the active running instance |
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
 Once installed, you can configure the plugin directly within KOReader:
 1. Open the top menu in KOReader.
@@ -113,7 +116,7 @@ Once installed, you can configure the plugin directly within KOReader:
 
 ---
 
-## Credits & Acknowledgments
+## 🤝 Credits & Acknowledgments
 
 This plugin would not be possible without the hard work of the original developers:
 *   **AnthonyGress** for the beautiful [ZenUI slider engine](https://github.com/AnthonyGress/zen_ui.koplugin) implementation.
