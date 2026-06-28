@@ -35,6 +35,8 @@ This project is a hybrid merge of two excellent community resources, compiled, r
 *   **Robust Environment Compatibility:** Re-engineered internal plugin detection paths to work seamlessly across all platforms, including Kindle devices where working directories vary from the KOReader root.
 *   **Native Customization Menu:** Injects seamlessly into KOReader's native settings menu (`Settings -> Quick settings`), allowing you to toggle slider visibility, enforce opening defaults, and reorder your button layout via a drag-and-drop sort widget.
 
+> **Important Note on Core/External Plugins:** This plugin does **not** bundle any third-party tools or games (like Chess, Crossword, QuickRSS, etc.). It only acts as a control panel shortcut to trigger them. All dependent plugins must be downloaded and installed separately on your device for their respective buttons to appear.
+
 ---
 
 ## Installation & Upgrading
