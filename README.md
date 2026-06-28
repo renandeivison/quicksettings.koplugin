@@ -74,34 +74,34 @@ You can fully customize the interface by replacing the original images with your
 
 | Display Name (Label) | Icon Path in Plugin | Behavior / Hardware or Plugin Dependency |
 | :--- | :--- | :--- |
-| Dynamically switches between the current SSID, "Connecting...", "Disconnecting...", or "Wi-Fi" | `icons/quick_wifi.png` | Toggles the native Wi-Fi connection (Optionally opens the available networks list).[cite: 1] |
-| "Night" | `icons/quick_nightmode.png` | Toggles Night Mode colors (e-ink screen inversion).[cite: 1] |
-| "Frontlight" | `icons/lightbulb.png` | Toggles the screen backlight completely On/Off. *(Discovered only on devices with Frontlight)*[cite: 1] |
-| "Rotation" | `icons/quick_rotate.png` | Enables/Disables the automatic screen rotation sensor. *(Discovered only on devices with G-Sensor / Accelerometer)*[cite: 1] |
-| "Rotate" | `icons/quick_rotate.png` | Manually rotates the screen in 90° cycles (IterateRotation).[cite: 1] |
-| "USB" | `icons/quick_usb.png` | Triggers the USB Mass Storage mode if supported by the hardware.[cite: 1] |
-| "Restart" | `icons/quick_restart.png` | Displays a confirmation dialog box to restart KOReader.[cite: 1] |
-| "Exit" | `icons/quick_exit.png` | Displays a confirmation dialog box to exit KOReader.[cite: 1] |
-| "Sleep" | `icons/quick_sleep.png` | Suspends or powers off the e-reader (depending on hardware support).[cite: 1] |
-| "Search" | `icons/quick_search.png` | Triggers the native KOReader file search event.[cite: 1] |
-| "Cloud" | `icons/quick_cloud.png` | Opens the native cloud storage manager.[cite: 1] |
-| "Z-Lib" | `icons/quick_zlib.png` | Opens the Z-Library plugin gateway. *(Requires the `zlibrary` plugin installed)*[cite: 1] |
-| "Search" | `icons/quick_search.png` | Opens the book search menu within the Calibre catalog. *(Requires the `calibre` plugin installed)*[cite: 1] |
-| "Calibre" | `icons/quick_calibre.png` | Starts or stops the wireless connection with the Calibre Companion server. *(Requires `calibre` plugin)*[cite: 1] |
-| "Streak" | `icons/quick_streak.png` | Displays the reading goals calendar from the Reading Streak plugin. *(Requires `readingstreak` plugin)*[cite: 1] |
-| "LocalSend" | `icons/quick_localsend.png` | Toggles the LocalSend server status by tracking background PID files. *(Requires `localsend` plugin)*[cite: 1] |
-| "Progress" | `icons/quick_stats_progress.png` | Direct shortcut to the current reading progress statistics and graphs. *(Requires `statistics` plugin)*[cite: 1] |
-| "Calendar" | `icons/quick_stats_calendar.png` | Direct shortcut to the reading history calendar view. *(Requires `statistics` plugin)*[cite: 1] |
-| "Battery" | `icons/quick_battery.png` | Displays advanced battery statistics and health cycles. *(Requires `batterystat` plugin)*[cite: 1] |
-| "QuickRSS" | `icons/quick_quickrss.png` | Opens the feed reader directly through native feed view UI modules. *(Requires `quickrss` plugin)*[cite: 1] |
-| "OPDS" | `icons/quick_opds.png` | Opens the external OPDS catalog catalog. *(Requires `opds` plugin)*[cite: 1] |
-| "Puzzle" | `icons/quick_puzzle.png` | Opens the integrated Slide Puzzle mini-game. *(Requires `slidepuzzle` plugin)*[cite: 1] |
-| "Crossword" | `icons/quick_crossword.png` | Triggers the built-in Crossword puzzle game menu. *(Requires `crossword` plugin)*[cite: 1] |
-| "Connections" | `icons/quick_connections.png` | Runs the main callback for the NYT Connections game interface. *(Requires `connections` plugin)*[cite: 1] |
-| "Chess" | `icons/quick_chess.png` | Starts the game loop for the native KOChess chess engine. *(Requires `chess` plugin)*[cite: 1] |
-| "Casual Chess" | `icons/quick_casualchess.png` | Starts the game loop for the Casual KOChess variant. *(Requires `casualkochess` plugin)*[cite: 1] |
-| "Sync" | `icons/quick_sync.png` | Forces a background sync of your book progress with the KOSync server.[cite: 1] |
-| "FileBrowser+" | `icons/quick_filebrowser.png` | Toggles the HTTP server and validates its status via background PID processes. *(Requires plugin)*[cite: 1] |
+| "Wi-Fi" | `icons/quick_wifi.png` | Toggles the native Wi-Fi connection (Optionally opens the available networks list). |
+| "Night" | `icons/quick_nightmode.png` | Toggles Night Mode colors (e-ink screen inversion). |
+| "Frontlight" | `icons/lightbulb.png` | Toggles the screen backlight completely On/Off. *(Discovered only on devices with Frontlight)* |
+| "Rotation" | `icons/quick_rotate.png` | Enables/Disables the automatic screen rotation sensor. *(Discovered only on devices with G-Sensor / Accelerometer)* |
+| "Rotate" | `icons/quick_rotate.png` | Manually rotates the screen in 90° cycles (IterateRotation). |
+| "USB" | `icons/quick_usb.png` | Triggers the USB Mass Storage mode if supported by the hardware. |
+| "Restart" | `icons/quick_restart.png` | Displays a confirmation dialog box to restart KOReader. |
+| "Exit" | `icons/quick_exit.png` | Displays a confirmation dialog box to exit KOReader. |
+| "Sleep" | `icons/quick_sleep.png` | Suspends or powers off the e-reader (depending on hardware support). |
+| "Search" | `icons/quick_search.png` | Triggers the native KOReader file search event. |
+| "Cloud" | `icons/quick_cloud.png` | Opens the native cloud storage manager. |
+| "Z-Lib" | `icons/quick_zlib.png` | Opens the Z-Library plugin gateway. *(Requires the `zlibrary` plugin installed)* |
+| "Search" | `icons/quick_search.png` | Opens the book search menu within the Calibre catalog. *(Requires the `calibre` plugin installed)* |
+| "Calibre" | `icons/quick_calibre.png` | Starts or stops the wireless connection with the Calibre Companion server. *(Requires `calibre` plugin)* |
+| "Streak" | `icons/quick_streak.png` | Displays the reading goals calendar from the Reading Streak plugin. *(Requires `readingstreak` plugin)* |
+| "LocalSend" | `icons/quick_localsend.png` | Toggles the LocalSend server status by tracking background PID files. *(Requires `localsend` plugin)* |
+| "Progress" | `icons/quick_stats_progress.png` | Direct shortcut to the current reading progress statistics and graphs. *(Requires `statistics` plugin)* |
+| "Calendar" | `icons/quick_stats_calendar.png` | Direct shortcut to the reading history calendar view. *(Requires `statistics` plugin)* |
+| "Battery" | `icons/quick_battery.png` | Displays advanced battery statistics and health cycles. *(Requires `batterystat` plugin)* |
+| "QuickRSS" | `icons/quick_quickrss.png` | Opens the feed reader directly through native feed view UI modules. *(Requires `quickrss` plugin)* |
+| "OPDS" | `icons/quick_opds.png` | Opens the external OPDS catalog catalog. *(Requires `opds` plugin)* |
+| "Puzzle" | `icons/quick_puzzle.png` | Opens the integrated Slide Puzzle mini-game. *(Requires `slidepuzzle` plugin)* |
+| "Crossword" | `icons/quick_crossword.png` | Triggers the built-in Crossword puzzle game menu. *(Requires `crossword` plugin)* |
+| "Connections" | `icons/quick_connections.png` | Runs the main callback for the NYT Connections game interface. *(Requires `connections` plugin)* |
+| "Chess" | `icons/quick_chess.png` | Starts the game loop for the native KOChess chess engine. *(Requires `chess` plugin)* |
+| "Casual Chess" | `icons/quick_casualchess.png` | Starts the game loop for the Casual KOChess variant. *(Requires `casualkochess` plugin)* |
+| "Sync" | `icons/quick_sync.png` | Forces a background sync of your book progress with the KOSync server. |
+| "FileBrowser+" | `icons/quick_filebrowser.png` | Toggles the HTTP server and validates its status via background PID processes. *(Requires plugin)* |
 ---
 
 ## ⚙️ Configuration
