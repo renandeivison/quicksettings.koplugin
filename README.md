@@ -4,13 +4,14 @@
 
 # All buttons activated
 
-<img width="400" alt="FileManager_2026-06-19_234143" src="https://github.com/user-attachments/assets/e79b715b-a2b6-47b3-8a13-8e53601d3a50" />
+<img width="400" alt="FileManager_2026-06-28_155701" src="https://github.com/user-attachments/assets/4aadc180-6794-4eec-9665-57eecac6bfc2" />
+
 
 # Quick Settings Plugin for KOReader
 
 A native, clean, and highly customizable **Quick Settings Panel** for KOReader. This plugin combines a beautiful slider interface with an accessible control toggle panel.
 
-This project is a hybrid merge of two excellent community resources, compiled and optimized using AI assistance:
+This project is a hybrid merge of two excellent community resources, compiled, reworked, and optimized using AI assistance:
 *   **ZenUI Sliders:** Derived from [AnthonyGress/zen_ui.koplugin](https://github.com/AnthonyGress/zen_ui.koplugin).
 *   **Quick Settings Logic:** Derived from the `2-quick-settings.lua` patch found in [qewer33/koreader-patches](https://github.com/qewer33/koreader-patches).
 
@@ -22,6 +23,8 @@ This project is a hybrid merge of two excellent community resources, compiled an
 > 
 > As a personal project maintained in my spare time, it is provided "as-is." While you are more than welcome to use, fork, or modify it, please keep in mind that official support or frequent updates are not guaranteed.
 
+> **Tested Device:** This plugin was developed and tested exclusively on a **Kindle Paperwhite 11/12 Signature Edition**. While it is designed to be compatible with other devices running KOReader, performance and layout rendering on other hardware cannot be guaranteed.
+
 ---
 
 ## Features
@@ -29,59 +32,78 @@ This project is a hybrid merge of two excellent community resources, compiled an
 *   **Integrated Panel:** Combines your main navigation bar, quick toggle buttons, and frontlight sliders into a single unified menu view.
 *   **ZenUI Sliders:** Upgrades the native KOReader frontlight/warmth bars with smooth, gesture-friendly pill-and-circle sliders.
 *   **Dynamic Grid Layout:** Displays a perfectly proportioned single row when you select up to 7 buttons. If you enable more than 7 items, the plugin automatically adds new rows to accommodate your selection cleanly.
-*   **Extensive App Toggles:** Easy access to Wi-Fi, Night Mode, Rotation, USB Mass Storage, Restart/Exit, Search, and popular plugins like Z-Library, Calibre, Reading Streak, LocalSend, and File Browser.
+*   **Smart Plugin Autodetection:** Optional buttons are automatically hidden unless their corresponding plugins are actually installed on your device, preventing interface clutter.
+*   **Robust Environment Compatibility:** Re-engineered internal plugin detection paths to work seamlessly across all platforms, including Kindle devices where working directories vary from the KOReader root.
 *   **Native Customization Menu:** Injects seamlessly into KOReader's native settings menu (`Settings -> Quick settings`), allowing you to toggle slider visibility, enforce opening defaults, and reorder your button layout via a drag-and-drop sort widget.
 
+### Preview
+
+<!-- Replace these placeholder paths with the actual paths to your images once uploaded to GitHub -->
+<p align="center">
+  <img src="images/panel_preview.png" alt="Quick Settings Panel Preview" width="400"/>
+  <img src="images/settings_preview.png" alt="Customization Menu Preview" width="400"/>
+</p>
+
 ---
 
-## Installation
+## Installation & Upgrading
 
-1.  **Download the plugin:** Copy the `main.lua` file from this repository.
+1.  **Download the plugin:** Download the latest version of this repository.
 2.  **Access your device directory:** Connect your e-reader to your computer via USB, or use an SSH/SFTP connection.
 3.  **Navigate to the plugins folder:** Go to the KOReader internal directory:
-
+   
     koreader/plugins/
-
-4.  **Create a plugin folder:** Create a new folder named `quicksettings.koplugin`:
-
+   
+4.  **Create/Replace the plugin folder:** Ensure your folder is named exactly `quicksettings.koplugin`:
+   
     koreader/plugins/quicksettings.koplugin/
+   
+5.  **Place the files:** Paste the `main.lua` file **and the accompanying `icons/` folder** inside `quicksettings.koplugin/`.
 
-5.  **Place the file:** Paste the `main.lua` file inside that folder.
+>  **IMPORTANT TAB ICON NOTE:** 
+> * **If you are already using ZenUI:** The main plugin tab icon will automatically be pulled from ZenUI. No extra steps are required.
+> * **If you are NOT using ZenUI:** You **must** manually place an icon file into your KOReader icons directory at `/koreader/icons/quicksettings.svg` or `/koreader/icons/quicksettings.png`. Otherwise, the main menu tab icon will not display correctly.
 
-> **IMPORTANT TAB ICON NOTE:** 
-> * **If you are already using ZenUI:** The plugin tab icon will automatically be pulled from ZenUI. No extra steps are required.
-> * **If you are NOT using ZenUI:** You **must** manually place an icon file named `quicksettings.svg` or `quicksettings.png` into your KOReader icons directory (`koreader/icons/`). Otherwise, the main menu tab icon will not display correctly.
-
-6.  **Restart KOReader:** Safely eject your device or restart the KOReader software.
+6.  **Restart KOReader:** Safely eject your device or restart the KOReader software. *Note: If upgrading from an older version, your existing button sequence configuration will be automatically preserved and backfilled.*
 
 ---
 
-## Icons Reference & Customization
+## Localized Icon System & Customization
 
-If any specific button icon does not show up on your interface, it means your current KOReader setup or theme is missing that asset. 
+All button action icons now load locally directly from `plugins/quicksettings.koplugin/icons/` instead of polluting KOReader's global cache. 
 
-Because **KOReader supports both `.svg` and `.png` image extensions**, you can fix this manually by adding the files to your `koreader/icons/` directory. **You can also use this to completely customize the interface with your own custom icons!** Simply create or download your preferred design, rename it to match the exact base name below, and drop it in the folder:
+### PNG → SVG Auto-Fallback
+The asset loader automatically detects the file type. If a preferred `.png` icon is missing from the local folder, it will instantly fall back and look for the `.svg` variant at the same path. 
 
-| Feature / Button | Required Asset Filename (Use `.svg` or `.png`) |
-| :--- | :--- |
-| **Wi-Fi** | `quick_wifi` |
-| **Night Mode** | `quick_nightmode` |
-| **Rotate** | `quick_rotate` |
-| **USB** | `quick_usb` |
-| **Restart** | `quick_restart` |
-| **Exit** | `quick_exit` |
-| **Sleep** | `quick_sleep` |
-| **Search** | `quick_search` |
-| **Cloud** | `quick_cloud` |
-| **Z-Library** | `quick_zlib` |
-| **Calibre Search** | `quick_search` |
-| **Calibre** | `quick_calibre` |
-| **Streak** | `quick_streak` |
-| **LocalSend** | `quick_localsend` |
-| **File Browser** | `quick_filebrowser` |
-| **Reading Progress** | `quick_stats_progress` |
-| **Reading Calendar** | `quick_stats_calendar` |
-| **Battery Stats** | `quick_battery` |
+### Using Custom Icons
+You can easily completely customize the button interface with your own custom icons! Simply create or download your preferred graphic, name it exactly like the button ID listed below (using either `.png` or `.svg`), and drop it into `plugins/quicksettings.koplugin/icons/`:
+
+| Button ID / Asset Name | Linked Feature / Core Plugin Dependency | Action Behavior |
+| :--- | :--- | :--- |
+| `quick_wifi` | Core Wi-Fi Toggle | Switches Wi-Fi State (Optional Network List prompt) |
+| `quick_nightmode`| Core Night Mode | Toggles E-Ink Night Mode colors |
+| `quick_rotate` | Core Screen Rotation | Cycles display rotation |
+| `quick_usb` | Core USB Mass Storage | Launches USB connection screen |
+| `quick_restart` | Core System Action | Restarts KOReader |
+| `quick_exit` | Core System Action | Exits KOReader |
+| `quick_sleep` | Core System Action | Puts device into Sleep Mode |
+| `quick_search` | Core Search Engine / Calibre | Launches text search or Calibre Catalog Search |
+| `quick_cloud` | Core Cloud Storage | Opens Cloud management |
+| `quick_zlib` | Z-Library Plugin | Launches local Z-Library portal |
+| `quick_calibre` | Calibre Plugin | Launches Calibre connection menu |
+| `quick_streak` | Reading Streak Plugin | Reviews your daily reading metrics |
+| `quick_filebrowserplus` | `filebrowserplus.koplugin` | Toggles server state and reads local PID runtime files |
+| `quick_stats_progress` | Core Reading Statistics | Direct path to your reading progress |
+| `quick_stats_calendar` | Core Reading Statistics | Direct path to your reading history calendar |
+| `quick_battery` | Core Battery Module | Reviews battery lifecycle diagnostics |
+| `quickrss` | `quickrss.koplugin` | Launches direct Feed View via core UI modules |
+| `opds` | `opds.koplugin` | Broadcasts standard `ShowOPDSCatalog` dispatch event |
+| `puzzles` | `slidepuzzle.koplugin` | Launches standard `SlidePuzzleOpen` overlay |
+| `crossword` | `crossword.koplugin` | Broadcasts native Dispatcher `CrosswordMenu` menu event |
+| `connections` | `connections.koplugin` | Invokes the NYT Connections `addToMainMenu` callback |
+| `chess` | `chess.koplugin` | Dispatches the native `KochessStart` event loop |
+| `casual_chess` | `casualkochess.koplugin` | Dispatches the native `CasualChessStart` event loop |
+| `kosync` | `kosync.koplugin` | Forces a background sync via the active running instance |
 
 ---
 
@@ -92,7 +114,7 @@ Once installed, you can configure the plugin directly within KOReader:
 2. Navigate to the **Gear icon (Settings)** -> **Quick settings**.
 3. From here, you can:
     * Enable or disable specific action buttons.
-    * Tap **"Arrange buttons"** to change their sequence.
+    * Tap **"Organizar botões"** (Arrange buttons) to change their sequence.
     * Toggle the visibility of the Brightness and Warmth sliders.
     * Toggle the option to **show or hide the list of available Wi-Fi networks** immediately upon turning Wi-Fi on.
 
