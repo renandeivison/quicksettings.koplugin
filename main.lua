@@ -254,7 +254,7 @@ function QuickSettingsPlugin:init()
             streak = false, stats_progress = false, stats_calendar = false, battery_stats = false,
             localsend = false,
             quickrss = false, opds = false, puzzle = false, crossword = false, connections = false,
-            chess = false, casualchess = false, kosync = false, filebrowserplus = false, bookfusion = false, focus = false,
+            chess = false, casualchess = false, kosync = false, filebrowserplus = false, bookfusion = false, 
         },
         show_frontlight = true,
         show_warmth = true,
