@@ -1,7 +1,6 @@
 local WidgetContainer = require("ui/widget/container/widgetcontainer")
 local Blitbuffer = require("ffi/blitbuffer")
 local CenterContainer = require("ui/widget/container/centercontainer")
-local DataStorage = require("datastorage")
 local Device = require("device")
 local Event = require("ui/event")
 local Font = require("ui/font")
@@ -246,40 +245,15 @@ end
 -- ============================================================
 
 function QuickSettingsPlugin:init()
-    -- Copy plugin icons to koreader/icons/ so IconWidget can find them by name.
-    -- Only needs to run once per session (init runs every time FileManager/ReaderUI is recreated).
-    if not QuickSettingsPlugin._icons_synced then
-        QuickSettingsPlugin._icons_synced = true
-        local ffiUtil = require("ffi/util")
-        local lfs = require("lfs")
-        local plugin_icons_dir = DataStorage:getDataDir() .. "/plugins/quicksettings.koplugin/icons/"
-        local koreader_icons_dir = DataStorage:getDataDir() .. "/icons/"
-        -- Ensure the icons dir exists (uses KOReader's own cross-platform helper)
-        if not lfs.attributes(koreader_icons_dir, "mode") then
-            util.makePath(koreader_icons_dir)
-        end
-        if lfs.attributes(plugin_icons_dir, "mode") == "directory" then
-            for file in lfs.dir(plugin_icons_dir) do
-                if file ~= "." and file ~= ".." then
-                    local src = plugin_icons_dir .. file
-                    local dst = koreader_icons_dir .. file
-                    if not lfs.attributes(dst, "mode") then
-                        ffiUtil.copyFile(src, dst)
-                    end
-                end
-            end
-        end
-    end
-
     local config_default = {
-        button_order = { "wifi", "night", "frontlight", "rotate", "rotation", "usb", "search", "cloud", "zlibrary", "calibre", "calibre_search", "streak", "localsend", "stats_progress", "stats_calendar", "battery_stats", "restart", "exit", "sleep", "quickrss", "opds", "puzzle", "crossword", "connections", "chess", "casualchess", "kosync", "filebrowserplus", "bookfusion" },
+        button_order = { "wifi", "night", "frontlight", "rotate", "rotation", "usb", "search", "cloud", "zlibrary", "calibre", "calibre_search", "streak", "localsend", "stats_progress", "stats_calendar", "battery_stats", "restart", "exit", "sleep", "quickrss", "opds", "puzzle", "crossword", "connections", "chess", "casualchess", "kosync", "filebrowserplus" },
         show_buttons = {
             wifi = true, night = true, frontlight = true, rotate = true, rotation = false, search = false, usb = false, cloud = false,
             zlibrary = false, calibre = false, calibre_search = false, restart = true, exit = true, sleep = true,
             streak = false, stats_progress = false, stats_calendar = false, battery_stats = false,
             localsend = false,
             quickrss = false, opds = false, puzzle = false, crossword = false, connections = false,
-            chess = false, casualchess = false, kosync = false, filebrowserplus = false, bookfusion = false,
+            chess = false, casualchess = false, kosync = false, filebrowserplus = false,
         },
         show_frontlight = true,
         show_warmth = true,
@@ -329,7 +303,7 @@ function QuickSettingsPlugin:init()
 
     local button_defs = {
         wifi = {
-            icon = "quick_wifi.png", label = _("Wi-Fi"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_wifi.png", label = _("Wi-Fi"),
             label_func = function()
                 if _toggling_wifi then
                     return NetworkMgr:isWifiOn() and _("Disconnecting...") or _("Connecting...")
@@ -374,7 +348,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         night = {
-            icon = "quick_nightmode.png", label = _("Night"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_nightmode.png", label = _("Night"),
             active_func = function() return G_reader_settings:isTrue("night_mode") end,
             callback = function(touch_menu)
                 local night_mode = G_reader_settings:isTrue("night_mode")
@@ -386,7 +360,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         frontlight = {
-            icon = "lightbulb.png",
+            icon = "plugins/quicksettings.koplugin/icons/lightbulb.png",
             label = _("Frontlight"),
             visible_func = function() return Device:hasFrontlight() end,
             active_func = function() return Device:getPowerDevice():isFrontlightOn() end,
@@ -396,7 +370,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         rotation = {
-            icon = "quick_rotate.png",
+            icon = "plugins/quicksettings.koplugin/icons/quick_rotate.png",
             label = _("Rotation"),
             visible_func = function() return Device:hasGSensor() end,
             active_func = function() return not G_reader_settings:isTrue("input_ignore_gsensor") end,
@@ -405,19 +379,19 @@ function QuickSettingsPlugin:init()
                 touch_menu:updateItems(1)
             end,
         },
-        rotate = { icon = "quick_rotate.png", label = _("Rotate"), callback = function() UIManager:broadcastEvent(Event:new("IterateRotation")) end },
-        usb = { icon = "quick_usb.png", label = _("USB"), callback = function() if Device:canToggleMassStorage() then UIManager:broadcastEvent(Event:new("RequestUSBMS")) end end },
-        restart = { icon = "quick_restart.png", label = _("Restart"), callback = function() UIManager:show(ConfirmBox:new{ text = _("Are you sure you want to restart KOReader?"), ok_text = _("Restart"), ok_callback = function() UIManager:broadcastEvent(Event:new("Restart")) end }) end },
-        exit = { icon = "quick_exit.png", label = _("Exit"), callback = function() UIManager:show(ConfirmBox:new{ text = _("Are you sure you want to exit KOReader?"), ok_text = _("Exit"), ok_callback = function() UIManager:broadcastEvent(Event:new("Exit")) end }) end },
-        sleep = { icon = "quick_sleep.png", label = _("Sleep"), callback = function() if Device:canSuspend() then UIManager:broadcastEvent(Event:new("RequestSuspend")) elseif Device:canPowerOff() then UIManager:broadcastEvent(Event:new("RequestPowerOff")) end end },
-        search = { icon = "quick_search.png", label = _("Search"), callback = function() UIManager:broadcastEvent(Event:new("ShowFileSearch")) end },
-        cloud = { icon = "quick_cloud.png", label = _("Cloud"), callback = function() UIManager:broadcastEvent(Event:new("ShowCloudStorage")) end },
-        zlibrary = { icon = "quick_zlib.png", label = _("Z-Lib"), visible_func = function() return hasPlugin("zlibrary") end, callback = function() UIManager:broadcastEvent(Event:new("ZlibrarySearch")) end },
-        calibre_search = { icon = "quick_search.png", label = _("Search"), visible_func = function() return hasPlugin("calibre") end, callback = function(touch_menu) touch_menu:closeMenu(); UIManager:broadcastEvent(Event:new("CalibreSearch")) end },
-        calibre = { icon = "quick_calibre.png", label = _("Calibre"), visible_func = function() return hasPlugin("calibre") end, active_func = function() local CW = package.loaded["wireless"]; return type(CW)=="table" and CW.calibre_socket ~= nil end, callback = function(touch_menu) local CW = package.loaded["wireless"]; if type(CW)=="table" and CW.calibre_socket ~= nil then UIManager:broadcastEvent(Event:new("CloseWirelessConnection")) else UIManager:broadcastEvent(Event:new("StartWirelessConnection")) end; UIManager:scheduleIn(1, function() touch_menu:updateItems(1) end) end },
-        streak = { icon = "quick_streak.png", label = _("Streak"), visible_func = function() return hasPlugin("readingstreak") end, callback = function() UIManager:broadcastEvent(Event:new("ShowReadingStreakCalendar")) end },
+        rotate = { icon = "plugins/quicksettings.koplugin/icons/quick_rotate.png", label = _("Rotate"), callback = function() UIManager:broadcastEvent(Event:new("IterateRotation")) end },
+        usb = { icon = "plugins/quicksettings.koplugin/icons/quick_usb.png", label = _("USB"), callback = function() if Device:canToggleMassStorage() then UIManager:broadcastEvent(Event:new("RequestUSBMS")) end end },
+        restart = { icon = "plugins/quicksettings.koplugin/icons/quick_restart.png", label = _("Restart"), callback = function() UIManager:show(ConfirmBox:new{ text = _("Are you sure you want to restart KOReader?"), ok_text = _("Restart"), ok_callback = function() UIManager:broadcastEvent(Event:new("Restart")) end }) end },
+        exit = { icon = "plugins/quicksettings.koplugin/icons/quick_exit.png", label = _("Exit"), callback = function() UIManager:show(ConfirmBox:new{ text = _("Are you sure you want to exit KOReader?"), ok_text = _("Exit"), ok_callback = function() UIManager:broadcastEvent(Event:new("Exit")) end }) end },
+        sleep = { icon = "plugins/quicksettings.koplugin/icons/quick_sleep.png", label = _("Sleep"), callback = function() if Device:canSuspend() then UIManager:broadcastEvent(Event:new("RequestSuspend")) elseif Device:canPowerOff() then UIManager:broadcastEvent(Event:new("RequestPowerOff")) end end },
+        search = { icon = "plugins/quicksettings.koplugin/icons/quick_search.png", label = _("Search"), callback = function() UIManager:broadcastEvent(Event:new("ShowFileSearch")) end },
+        cloud = { icon = "plugins/quicksettings.koplugin/icons/quick_cloud.png", label = _("Cloud"), callback = function() UIManager:broadcastEvent(Event:new("ShowCloudStorage")) end },
+        zlibrary = { icon = "plugins/quicksettings.koplugin/icons/quick_zlib.png", label = _("Z-Lib"), visible_func = function() return hasPlugin("zlibrary") end, callback = function() UIManager:broadcastEvent(Event:new("ZlibrarySearch")) end },
+        calibre_search = { icon = "plugins/quicksettings.koplugin/icons/quick_search.png", label = _("Search"), visible_func = function() return hasPlugin("calibre") end, callback = function(touch_menu) touch_menu:closeMenu(); UIManager:broadcastEvent(Event:new("CalibreSearch")) end },
+        calibre = { icon = "plugins/quicksettings.koplugin/icons/quick_calibre.png", label = _("Calibre"), visible_func = function() return hasPlugin("calibre") end, active_func = function() local CW = package.loaded["wireless"]; return type(CW)=="table" and CW.calibre_socket ~= nil end, callback = function(touch_menu) local CW = package.loaded["wireless"]; if type(CW)=="table" and CW.calibre_socket ~= nil then UIManager:broadcastEvent(Event:new("CloseWirelessConnection")) else UIManager:broadcastEvent(Event:new("StartWirelessConnection")) end; UIManager:scheduleIn(1, function() touch_menu:updateItems(1) end) end },
+        streak = { icon = "plugins/quicksettings.koplugin/icons/quick_streak.png", label = _("Streak"), visible_func = function() return hasPlugin("readingstreak") end, callback = function() UIManager:broadcastEvent(Event:new("ShowReadingStreakCalendar")) end },
         localsend = {
-            icon = "quick_localsend.png", label = _("LocalSend"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_localsend.png", label = _("LocalSend"),
             visible_func = function() return hasPlugin("localsend") end,
             active_func = function() local f = io.open("/tmp/localsend_koreader.pid", "r"); if f then f:close(); return true end return false end,
             callback = function(touch_menu)
@@ -427,22 +401,22 @@ function QuickSettingsPlugin:init()
         },
 
         stats_progress = {
-            icon = "quick_stats_progress.png", label = _("Progress"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_stats_progress.png", label = _("Progress"),
             visible_func = function() return hasPlugin("statistics") end,
             callback = function(touch_menu) touch_menu:closeMenu(); UIManager:broadcastEvent(Event:new("ShowReaderProgress")) end,
         },
         stats_calendar = {
-            icon = "quick_stats_calendar.png", label = _("Calendar"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_stats_calendar.png", label = _("Calendar"),
             visible_func = function() return hasPlugin("statistics") end,
             callback = function(touch_menu) touch_menu:closeMenu(); UIManager:broadcastEvent(Event:new("ShowCalendarView")) end,
         },
         battery_stats = {
-            icon = "quick_battery.png", label = _("Battery"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_battery.png", label = _("Battery"),
             visible_func = function() return hasPlugin("batterystat") end,
             callback = function(touch_menu) touch_menu:closeMenu(); UIManager:broadcastEvent(Event:new("ShowBatteryStatistics")) end,
         },
         quickrss = {
-            icon = "quick_quickrss.png", label = _("QuickRSS"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_quickrss.png", label = _("QuickRSS"),
             visible_func = function() return hasPlugin("quickrss") end,
             callback = function(touch_menu)
                 touch_menu:closeMenu()
@@ -456,7 +430,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         opds = {
-            icon = "quick_opds.png", label = _("OPDS"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_opds.png", label = _("OPDS"),
             visible_func = function() return hasPlugin("opds") end,
             callback = function(touch_menu)
                 touch_menu:closeMenu()
@@ -464,7 +438,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         puzzle = {
-            icon = "quick_puzzle.png", label = _("Puzzle"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_puzzle.png", label = _("Puzzle"),
             visible_func = function() return hasPlugin("slidepuzzle") end,
             callback = function(touch_menu)
                 touch_menu:closeMenu()
@@ -472,7 +446,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         crossword = {
-            icon = "quick_crossword.png", label = _("Crossword"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_crossword.png", label = _("Crossword"),
             visible_func = function() return hasPlugin("crossword") end,
             callback = function(touch_menu)
                 touch_menu:closeMenu()
@@ -480,7 +454,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         connections = {
-            icon = "quick_connections.png", label = _("Connections"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_connections.png", label = _("Connections"),
             visible_func = function() return hasPlugin("connections") end,
             callback = function(touch_menu)
                 touch_menu:closeMenu()
@@ -500,7 +474,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         chess = {
-            icon = "quick_chess.png", label = _("Chess"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_chess.png", label = _("Chess"),
             visible_func = function() return hasPlugin("chess") end,
             callback = function(touch_menu)
                 touch_menu:closeMenu()
@@ -508,7 +482,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         casualchess = {
-            icon = "quick_chess.png", label = _("Chess"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_casualchess.png", label = _("Casual Chess"),
             visible_func = function() return hasPlugin("casualkochess") end,
             callback = function(touch_menu)
                 touch_menu:closeMenu()
@@ -516,7 +490,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         kosync = {
-            icon = "quick_sync.png", label = _("Sync"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_sync.png", label = _("Sync"),
             visible_func = function() return hasPlugin("kosync") end,
             callback = function(touch_menu)
                 touch_menu:closeMenu()
@@ -538,7 +512,7 @@ function QuickSettingsPlugin:init()
             end,
         },
         filebrowserplus = {
-            icon = "quick_filebrowser.png", label = _("FileBrowser+"),
+            icon = "plugins/quicksettings.koplugin/icons/quick_filebrowser.png", label = _("FileBrowser+"),
             visible_func = function() return hasPlugin("filebrowserplus") end,
             active_func = function()
                 local f = io.open("/tmp/filebrowserplus_koreader.pid", "r")
@@ -556,31 +530,11 @@ function QuickSettingsPlugin:init()
                 end)
             end,
         },
-        bookfusion = {
-            icon = "quick_bookfusion.png", label = _("BookFusion"),
-            visible_func = function() return hasPlugin("bookfusion") end,
-            callback = function(touch_menu)
-                touch_menu:closeMenu()
-                local ok_f, FileManager = pcall(require, "apps/filemanager/filemanager")
-                local ok_r, ReaderUI = pcall(require, "apps/reader/readerui")
-                local ui = (ok_f and FileManager.instance) or (ok_r and ReaderUI.instance)
-                if ui and ui.bookfusion then
-                    if ui.bookfusion.bf_settings:isLoggedIn() then
-                        ui.bookfusion:onSearchBooks()
-                    else
-                        ui.bookfusion:onLinkDevice()
-                    end
-                else
-                    local InfoMessage = require("ui/widget/infomessage")
-                    UIManager:show(InfoMessage:new{ text = _("BookFusion plugin is not installed.") })
-                end
-            end,
-        },
     }
 
     local button_display_names = {
         wifi = _("Wi-Fi"), night = _("Night mode"), frontlight = _("Frontlight"), rotate = _("Rotate"), rotation = _("Rotation"), usb = _("USB"), restart = _("Restart"), exit = _("Exit"), sleep = _("Sleep"), search = _("File search"), cloud = _("Cloud storage"), zlibrary = _("Z-Library"), calibre = _("Calibre"), calibre_search = _("Calibre Search"), streak = _("Streak"), localsend = _("LocalSend"), stats_progress = _("Reading Progress"), stats_calendar = _("Reading Calendar"), battery_stats = _("Battery Stats"),
-        quickrss = _("QuickRSS"), opds = _("OPDS"), puzzle = _("Puzzle"), crossword = _("Crossword"), connections = _("Connections"), chess = _("Chess"), casualchess = _("Casual Chess"), kosync = _("KOSync"), filebrowserplus = _("FileBrowser+"), bookfusion = _("BookFusion"),
+        quickrss = _("QuickRSS"), opds = _("OPDS"), puzzle = _("Puzzle"), crossword = _("Crossword"), connections = _("Connections"), chess = _("Chess"), casualchess = _("Casual Chess"), kosync = _("KOSync"), filebrowserplus = _("FileBrowser+"),
     }
 
     -- ============================================================
@@ -747,10 +701,18 @@ function QuickSettingsPlugin:init()
         local fixed_col_width = action_btn_size + Screen:scaleBySize(16) 
 
         local function makeActionButton(icon_name, label_text, active, dim)
-            -- Strip extension if present — IconWidget finds icons by name without extension
-            local icon_key = icon_name:gsub("%.[^%.]+$", "")
+            local icon_path = icon_name:find("/") and icon_name or nil
+            if icon_path then
+                local f = io.open(icon_path, "r")
+                if not f then
+                    icon_path = icon_path:gsub("%.png$", ".svg")
+                else
+                    f:close()
+                end
+            end
             local icon = IconWidget:new{
-                icon   = icon_key,
+                file   = icon_path or nil,
+                icon   = icon_path and nil or icon_name,
                 width  = icon_size,
                 height = icon_size,
                 alpha  = not active,
@@ -852,7 +814,7 @@ function QuickSettingsPlugin:init()
 
     local orig_init = TouchMenu.init
     function TouchMenu:init()
-        if config.open_on_start then self.last_index = 1 end
+        self.last_index = 1
         orig_init(self)
         if self.bar and type(self.bar.icon_widgets) == "table" then
             for _, btn in ipairs(self.bar.icon_widgets) do
@@ -884,15 +846,15 @@ function QuickSettingsPlugin:init()
         self.layout = {}
         table.insert(self.item_group, self.bar)
         table.insert(self.layout, self.bar.icon_widgets)
-
+        
         local panel = createQuickSettingsPanel(self)
         table.insert(self.item_group, panel)
-
+        
         local qs_refs = self._qs_refs
         if qs_refs and qs_refs.button_layout_row and #qs_refs.button_layout_row > 0 then
             table.insert(self.layout, qs_refs.button_layout_row)
         end
-
+        
         table.insert(self.item_group, self.footer_top_margin)
         table.insert(self.item_group, self.footer)
         self.page = self.page or 1
@@ -901,19 +863,6 @@ function QuickSettingsPlugin:init()
         self.page_info_right_chev:showHide(false)
         self.page_info_left_chev:enableDisable(false)
         self.page_info_right_chev:enableDisable(false)
-
-        -- Update time/battery info in footer (same as original updateItems)
-        local datetime = require("datetime")
-        local time_info_txt = datetime.secondsToHour(os.time(), G_reader_settings:isTrue("twelve_hour_clock"))
-        local powerd = Device:getPowerDevice()
-        if Device:hasBattery() then
-            local BD = require("ui/bidi")
-            local batt_lvl = powerd:getCapacity()
-            local batt_symbol = powerd:getBatterySymbol(powerd:isCharged(), powerd:isCharging(), batt_lvl)
-            time_info_txt = BD.wrap(time_info_txt) .. " " .. BD.wrap("⌁") .. BD.wrap(batt_symbol) .. BD.wrap(batt_lvl .. "%")
-        end
-        self.time_info:setText(time_info_txt)
-
         local old_dimen = self.dimen:copy()
         self.dimen.w = self.width
         self.dimen.h = self.item_group:getSize().h + self.bordersize * 2 + self.padding
@@ -959,6 +908,7 @@ function QuickSettingsPlugin:init()
     local orig_switchMenuTab = TouchMenu.switchMenuTab
     function TouchMenu:switchMenuTab(tab_num)
         orig_switchMenuTab(self, tab_num)
+        if config.open_on_start then self.last_index = 1 end
     end
 
     local orig_onCloseWidget = TouchMenu.onCloseWidget
