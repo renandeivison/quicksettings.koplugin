@@ -38,6 +38,42 @@ A fast, gesture-friendly control panel for [KOReader](https://github.com/koreade
 
   Everything else (Wi-Fi, night mode, frontlight, rotation, USB, restart, exit, sleep, search, cloud storage) works out of the box with no extra plugins.
 - **Persistent settings** — button visibility, order, slider visibility, and Focus Mode preferences are saved and restored automatically.
+# Button Icons Reference
+
+All icons are loaded from `plugins/quicksettings.koplugin/icons/`.  
+If a `.png` file is missing, the plugin automatically falls back to the `.svg` variant at the same path.
+
+| Button | Icon filename |
+|---|---|
+| Wi-Fi | `quick_wifi` |
+| Night Mode | `quick_nightmode` |
+| Frontlight | `quick_nightmode` |
+| Rotate | `quick_rotate` |
+| Rotation Sensor | `quick_rotate` |
+| USB | `quick_usb` |
+| File Search | `quick_search` |
+| Cloud Storage | `quick_cloud` |
+| Z-Library | `quick_zlib` |
+| Calibre | `quick_calibre` |
+| Calibre Search | `quick_calibre` |
+| Reading Progress | `quick_stats_progress` |
+| Reading Calendar | `quick_stats_calendar` |
+| Battery Stats | `quick_battery` |
+| Reading Streak | `quick_streak` |
+| LocalSend | `quick_localsend` |
+| Restart | `quick_restart` |
+| Exit | `quick_exit` |
+| Sleep | `quick_sleep` |
+| QuickRSS | `quick_quickrss` |
+| OPDS | `quick_opds` |
+| Puzzle | `quick_puzzle` |
+| Crossword | `quick_crossword` |
+| Connections | `quick_connections` |
+| Casual Chess | `quick_chess` |
+| KOSync | `quick_sync` |
+| FileBrowser+ | `quick_filebrowser` |
+| BookFusion | `quick_bookfusion` |
+| Focus Mode | `quick_focus` |
 
 ## Focus Mode
 
