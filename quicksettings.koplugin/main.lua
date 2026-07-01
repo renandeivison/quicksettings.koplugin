@@ -246,38 +246,40 @@ end
 -- ============================================================
 
 function QuickSettingsPlugin:init()
-    -- Copy plugin icons to koreader/icons/ so IconWidget can find them by name
-    local ffiUtil = require("ffi/util")
-    local plugin_icons_dir = DataStorage:getDataDir() .. "/plugins/quicksettings.koplugin/icons/"
-    local koreader_icons_dir = DataStorage:getDataDir() .. "/icons/"
-    -- Ensure the icons dir exists
-    if not require("lfs").attributes(koreader_icons_dir, "mode") then
-        os.execute('mkdir -p "' .. koreader_icons_dir .. '"')
-    end
-    local lfs = require("lfs")
-    if lfs.attributes(plugin_icons_dir, "mode") == "directory" then
-        for file in lfs.dir(plugin_icons_dir) do
-            if file ~= "." and file ~= ".." then
-                local src = plugin_icons_dir .. file
-                local dst = koreader_icons_dir .. file
-                if not lfs.attributes(dst, "mode") then
-                    ffiUtil.copyFile(src, dst)
+    -- Copy plugin icons to koreader/icons/ so IconWidget can find them by name.
+    -- Only needs to run once per session (init runs every time FileManager/ReaderUI is recreated).
+    if not QuickSettingsPlugin._icons_synced then
+        QuickSettingsPlugin._icons_synced = true
+        local ffiUtil = require("ffi/util")
+        local lfs = require("lfs")
+        local plugin_icons_dir = DataStorage:getDataDir() .. "/plugins/quicksettings.koplugin/icons/"
+        local koreader_icons_dir = DataStorage:getDataDir() .. "/icons/"
+        -- Ensure the icons dir exists (uses KOReader's own cross-platform helper)
+        if not lfs.attributes(koreader_icons_dir, "mode") then
+            util.makePath(koreader_icons_dir)
+        end
+        if lfs.attributes(plugin_icons_dir, "mode") == "directory" then
+            for file in lfs.dir(plugin_icons_dir) do
+                if file ~= "." and file ~= ".." then
+                    local src = plugin_icons_dir .. file
+                    local dst = koreader_icons_dir .. file
+                    if not lfs.attributes(dst, "mode") then
+                        ffiUtil.copyFile(src, dst)
+                    end
                 end
             end
         end
-        -- Reload IconWidget cache so new icons are found
-        package.loaded["ui/widget/iconwidget"] = nil
     end
 
     local config_default = {
-        button_order = { "wifi", "night", "frontlight", "rotate", "rotation", "usb", "search", "cloud", "zlibrary", "calibre", "calibre_search", "streak", "localsend", "stats_progress", "stats_calendar", "battery_stats", "restart", "exit", "sleep", "quickrss", "opds", "puzzle", "crossword", "connections", "chess", "casualchess", "kosync", "filebrowserplus" },
+        button_order = { "wifi", "night", "frontlight", "rotate", "rotation", "usb", "search", "cloud", "zlibrary", "calibre", "calibre_search", "streak", "localsend", "stats_progress", "stats_calendar", "battery_stats", "restart", "exit", "sleep", "quickrss", "opds", "puzzle", "crossword", "connections", "chess", "casualchess", "kosync", "filebrowserplus", "bookfusion" },
         show_buttons = {
             wifi = true, night = true, frontlight = true, rotate = true, rotation = false, search = false, usb = false, cloud = false,
             zlibrary = false, calibre = false, calibre_search = false, restart = true, exit = true, sleep = true,
             streak = false, stats_progress = false, stats_calendar = false, battery_stats = false,
             localsend = false,
             quickrss = false, opds = false, puzzle = false, crossword = false, connections = false,
-            chess = false, casualchess = false, kosync = false, filebrowserplus = false,
+            chess = false, casualchess = false, kosync = false, filebrowserplus = false, bookfusion = false,
         },
         show_frontlight = true,
         show_warmth = true,
@@ -324,8 +326,6 @@ function QuickSettingsPlugin:init()
 
     -- Estado local para feedback transicional
     local _toggling_wifi = false
-
-    local _icons_dir = DataStorage:getDataDir() .. "/plugins/quicksettings.koplugin/icons/"
 
     local button_defs = {
         wifi = {
@@ -556,11 +556,31 @@ function QuickSettingsPlugin:init()
                 end)
             end,
         },
+        bookfusion = {
+            icon = "quick_bookfusion.png", label = _("BookFusion"),
+            visible_func = function() return hasPlugin("bookfusion") end,
+            callback = function(touch_menu)
+                touch_menu:closeMenu()
+                local ok_f, FileManager = pcall(require, "apps/filemanager/filemanager")
+                local ok_r, ReaderUI = pcall(require, "apps/reader/readerui")
+                local ui = (ok_f and FileManager.instance) or (ok_r and ReaderUI.instance)
+                if ui and ui.bookfusion then
+                    if ui.bookfusion.bf_settings:isLoggedIn() then
+                        ui.bookfusion:onSearchBooks()
+                    else
+                        ui.bookfusion:onLinkDevice()
+                    end
+                else
+                    local InfoMessage = require("ui/widget/infomessage")
+                    UIManager:show(InfoMessage:new{ text = _("BookFusion plugin is not installed.") })
+                end
+            end,
+        },
     }
 
     local button_display_names = {
         wifi = _("Wi-Fi"), night = _("Night mode"), frontlight = _("Frontlight"), rotate = _("Rotate"), rotation = _("Rotation"), usb = _("USB"), restart = _("Restart"), exit = _("Exit"), sleep = _("Sleep"), search = _("File search"), cloud = _("Cloud storage"), zlibrary = _("Z-Library"), calibre = _("Calibre"), calibre_search = _("Calibre Search"), streak = _("Streak"), localsend = _("LocalSend"), stats_progress = _("Reading Progress"), stats_calendar = _("Reading Calendar"), battery_stats = _("Battery Stats"),
-        quickrss = _("QuickRSS"), opds = _("OPDS"), puzzle = _("Puzzle"), crossword = _("Crossword"), connections = _("Connections"), chess = _("Chess"), casualchess = _("Casual Chess"), kosync = _("KOSync"), filebrowserplus = _("FileBrowser+"),
+        quickrss = _("QuickRSS"), opds = _("OPDS"), puzzle = _("Puzzle"), crossword = _("Crossword"), connections = _("Connections"), chess = _("Chess"), casualchess = _("Casual Chess"), kosync = _("KOSync"), filebrowserplus = _("FileBrowser+"), bookfusion = _("BookFusion"),
     }
 
     -- ============================================================
@@ -832,7 +852,7 @@ function QuickSettingsPlugin:init()
 
     local orig_init = TouchMenu.init
     function TouchMenu:init()
-        self.last_index = 1
+        if config.open_on_start then self.last_index = 1 end
         orig_init(self)
         if self.bar and type(self.bar.icon_widgets) == "table" then
             for _, btn in ipairs(self.bar.icon_widgets) do
@@ -864,15 +884,15 @@ function QuickSettingsPlugin:init()
         self.layout = {}
         table.insert(self.item_group, self.bar)
         table.insert(self.layout, self.bar.icon_widgets)
-        
+
         local panel = createQuickSettingsPanel(self)
         table.insert(self.item_group, panel)
-        
+
         local qs_refs = self._qs_refs
         if qs_refs and qs_refs.button_layout_row and #qs_refs.button_layout_row > 0 then
             table.insert(self.layout, qs_refs.button_layout_row)
         end
-        
+
         table.insert(self.item_group, self.footer_top_margin)
         table.insert(self.item_group, self.footer)
         self.page = self.page or 1
@@ -881,6 +901,19 @@ function QuickSettingsPlugin:init()
         self.page_info_right_chev:showHide(false)
         self.page_info_left_chev:enableDisable(false)
         self.page_info_right_chev:enableDisable(false)
+
+        -- Update time/battery info in footer (same as original updateItems)
+        local datetime = require("datetime")
+        local time_info_txt = datetime.secondsToHour(os.time(), G_reader_settings:isTrue("twelve_hour_clock"))
+        local powerd = Device:getPowerDevice()
+        if Device:hasBattery() then
+            local BD = require("ui/bidi")
+            local batt_lvl = powerd:getCapacity()
+            local batt_symbol = powerd:getBatterySymbol(powerd:isCharged(), powerd:isCharging(), batt_lvl)
+            time_info_txt = BD.wrap(time_info_txt) .. " " .. BD.wrap("⌁") .. BD.wrap(batt_symbol) .. BD.wrap(batt_lvl .. "%")
+        end
+        self.time_info:setText(time_info_txt)
+
         local old_dimen = self.dimen:copy()
         self.dimen.w = self.width
         self.dimen.h = self.item_group:getSize().h + self.bordersize * 2 + self.padding
@@ -926,7 +959,6 @@ function QuickSettingsPlugin:init()
     local orig_switchMenuTab = TouchMenu.switchMenuTab
     function TouchMenu:switchMenuTab(tab_num)
         orig_switchMenuTab(self, tab_num)
-        if config.open_on_start then self.last_index = 1 end
     end
 
     local orig_onCloseWidget = TouchMenu.onCloseWidget
