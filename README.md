@@ -15,7 +15,7 @@ A fast, gesture-friendly control panel for [KOReader](https://github.com/koreade
 - **One-screen control panel** — a dedicated tab in the file manager / reader menu with a grid of circular action buttons for common settings and actions.
 - **Custom slider widget** — a lightweight, pill-shaped slider (built in, no external dependency) for brightness and warmth, with tap, drag, and swipe support.
 - **Reorderable buttons** — long-press to open a drag-and-drop sorter and arrange the buttons in whatever order you like; hide the ones you don't use.
-- **Focus Mode** — hide selected tabs from the main menu (reader and file manager) to keep the UI minimal, while QuickSettings itself always stays reachable.
+- **Focus Mode** — a distraction-free mode that strips down KOReader's main menu to just the tabs you actually use. See the [dedicated section](#focus-mode) below.
 - **Smart integrations** — buttons for other plugins only appear when those plugins are actually installed:
 
   | Button          | Requires plugin      |
@@ -40,6 +40,21 @@ A fast, gesture-friendly control panel for [KOReader](https://github.com/koreade
   Everything else (Wi-Fi, night mode, frontlight, rotation, USB, restart, exit, sleep, search, cloud storage) works out of the box with no extra plugins.
 - **Persistent settings** — button visibility, order, slider visibility, and Focus Mode preferences are saved and restored automatically.
 
+## Focus Mode
+
+Focus Mode is QuickSettings' answer to menu clutter. KOReader's menus tend to accumulate tabs as you install more plugins — Settings, Tools, Search, Navigation, Typesetting, and whatever else each plugin adds — and it's easy to end up with a bar full of tabs you never touch. Focus Mode lets you pick exactly which ones stay visible.
+
+**How it works:**
+
+- Tap the **Focus Mode** button to open a checklist of every tab currently available in the main menu — both the standard KOReader tabs (Settings, Tools, Search, Main, Navigation, Typesetting, File Browser Settings) and any extra tabs added by other installed plugins, detected automatically.
+- Check the tabs you want to **hide**, then tap **Apply & Restart**. KOReader restarts so the simplified menu takes effect everywhere (reader and file manager).
+- The **QuickSettings tab itself is never hidden** — no matter what you turn off, you always have a way back into this panel (and back into Focus Mode, to undo it).
+- In the reader, the **File Browser (back) tab is always kept** as well, so you can never accidentally lock yourself out of navigating back to your library.
+- Focus Mode is entirely reversible: open the Focus Mode dialog again, uncheck whatever you want back, and apply. Your selection is remembered across restarts.
+- It's a global toggle — once enabled, the same hidden-tabs list applies to both the file manager and the reader menu, keeping the experience consistent wherever you are in KOReader.
+
+This makes Focus Mode especially useful on devices where you've installed several plugins for convenience but only use two or three menu tabs day-to-day — you get the functionality without the visual noise.
+
 ## Installation
 
 1. Download or clone this repository.
@@ -61,7 +76,7 @@ A fast, gesture-friendly control panel for [KOReader](https://github.com/koreade
   - Toggle the brightness and warmth sliders
   - Show available networks automatically when turning Wi-Fi on
   - Set QuickSettings to always open first
-  - Enable **Focus Mode** and choose which other menu tabs to hide
+  - Enable **Focus Mode** and choose which other menu tabs to hide — see [Focus Mode](#focus-mode) above for details
 
 ## Requirements
 
@@ -72,6 +87,6 @@ A fast, gesture-friendly control panel for [KOReader](https://github.com/koreade
 
 Issues and pull requests are welcome. Please keep changes to button behavior backward-compatible with existing saved configurations (`show_buttons` / `button_order`) whenever possible.
 
+## License
 
-### Special Appreciation & Credits
-I want to express my deep, sincere gratitude once again to **[@AnthonyGress](https://github.com/AnthonyGress)** and **[@qewer33](https://github.com/qewer33)**. A massive portion of this plugin's underlying layout handling, tracking logic, and interface engine was derived directly from their incredible work and foundational open-source contributions to the KOReader development community.
+See [LICENSE](LICENSE) for details.
