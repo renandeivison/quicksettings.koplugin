@@ -4,7 +4,7 @@
 
 # All buttons activated
 
-<img width="400" alt="FileManager_2026-06-28_155701" src="https://github.com/user-attachments/assets/4aadc180-6794-4eec-9665-57eecac6bfc2" />
+<img width="400" alt="FileManager_2026-07-01_194216" src="https://github.com/user-attachments/assets/52cf8c6b-693b-4d66-a2d9-9103693ad422" />
 
 # QuickSettings for KOReader
 
@@ -80,6 +80,9 @@ If a `.png` file is missing, the plugin automatically falls back to the `.svg` v
 
 Focus Mode is QuickSettings' answer to menu clutter. KOReader's menus tend to accumulate tabs as you install more plugins — Settings, Tools, Search, Navigation, Typesetting, and whatever else each plugin adds — and it's easy to end up with a bar full of tabs you never touch. Focus Mode lets you pick exactly which ones stay visible.
 
+<img width="400"  alt="FileManager_2026-07-01_194517" src="https://github.com/user-attachments/assets/7192ce01-ade3-4075-87d8-c7d89af94f9f" />
+
+
 **How it works:**
 
 - Tap the **Focus Mode** button to open a checklist of every tab currently available in the main menu — both the standard KOReader tabs (Settings, Tools, Search, Main, Navigation, Typesetting, File Browser Settings) and any extra tabs added by other installed plugins, detected automatically.
@@ -90,6 +93,9 @@ Focus Mode is QuickSettings' answer to menu clutter. KOReader's menus tend to ac
 - It's a global toggle — once enabled, the same hidden-tabs list applies to both the file manager and the reader menu, keeping the experience consistent wherever you are in KOReader.
 
 This makes Focus Mode especially useful on devices where you've installed several plugins for convenience but only use two or three menu tabs day-to-day — you get the functionality without the visual noise.
+
+<img width="400" alt="FileManager_2026-07-01_194755" src="https://github.com/user-attachments/assets/4eb7904d-7e1e-491d-af23-3da65c2e93c4" />
+
 
 ## Installation
 
