@@ -41,7 +41,7 @@ A fast, gesture-friendly control panel for [KOReader](https://github.com/koreade
 # Button Icons Reference
 
 Coppy the icons to 
-'Koreader/icons'  
+`Koreader/icons`  
 If a `.png` file is missing, the plugin automatically falls back to the `.svg` variant at the same path.
 
 | Button | Icon filename |
