@@ -31,7 +31,6 @@ A fast, gesture-friendly control panel for [KOReader](https://github.com/koreade
   | Puzzle          | `slidepuzzle`         |
   | Crossword       | `crossword`           |
   | Connections     | `connections`         |
-  | Chess           | `chess`               |
   | Casual Chess    | `casualkochess`       |
   | Sync            | `kosync`              |
   | FileBrowser+    | `filebrowserplus`     |
