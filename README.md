@@ -72,9 +72,6 @@ A fast, gesture-friendly control panel for [KOReader](https://github.com/koreade
 
 Issues and pull requests are welcome. Please keep changes to button behavior backward-compatible with existing saved configurations (`show_buttons` / `button_order`) whenever possible.
 
-## License
-
-See [LICENSE](LICENSE) for details.
 
 ### Special Appreciation & Credits
 I want to express my deep, sincere gratitude once again to **[@AnthonyGress](https://github.com/AnthonyGress)** and **[@qewer33](https://github.com/qewer33)**. A massive portion of this plugin's underlying layout handling, tracking logic, and interface engine was derived directly from their incredible work and foundational open-source contributions to the KOReader development community.
