@@ -247,7 +247,7 @@ end
 
 function QuickSettingsPlugin:init()
     local config_default = {
-        button_order = { "wifi", "night", "frontlight", "rotate", "rotation", "usb", "search", "cloud", "zlibrary", "calibre", "calibre_search", "streak", "localsend", "stats_progress", "stats_calendar", "battery_stats", "restart", "exit", "sleep", "quickrss", "opds", "puzzle", "crossword", "connections", "casualchess", "kosync", "filebrowserplus", "bookfusion", "focus" },
+        button_order = { "focus", "wifi", "night", "frontlight", "rotate", "rotation", "usb", "search", "cloud", "zlibrary", "calibre", "calibre_search", "streak", "localsend", "stats_progress", "stats_calendar", "battery_stats", "restart", "exit", "sleep", "quickrss", "opds", "puzzle", "crossword", "connections", "casualchess", "kosync", "filebrowserplus", "bookfusion" },
         show_buttons = {
             wifi = true, night = true, frontlight = true, rotate = true, rotation = false, search = false, usb = false, cloud = false,
             zlibrary = false, calibre = false, calibre_search = false, restart = true, exit = true, sleep = true,
