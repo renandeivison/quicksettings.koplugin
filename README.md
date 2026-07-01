@@ -34,7 +34,7 @@ You can fully customize the interface by replacing the pre-packed images with yo
 
 | Display Name (Label) | Icon Filename | Behavior / Hardware or Plugin Dependency |
 | :--- | :--- | :--- |
-| "Wi-Fi" | `quick_wifi.png` | Toggles native Wi-Fi connection and manages network scans safely. |
+| Dynamically switches between SSID, "Connecting...", or "Wi-Fi" | `quick_wifi.png` | Toggles native Wi-Fi connection and manages network scans safely. |
 | "Night" | `quick_nightmode.png` | Inverts screen colors (e-ink native inversion). |
 | "Frontlight" | `lightbulb.png` | Blinks/Toggles the backlight completely on or off. *(Hardware Dependent)* |
 | "Rotation" | `quick_rotate.png` | Enables/Disables the background G-Sensor accelerometer. *(Hardware Dependent)* |
@@ -54,6 +54,17 @@ You can fully customize the interface by replacing the pre-packed images with yo
 | "Progress" / "Calendar" | `quick_stats_...` | Shortcuts to reader progress tracking modules. *(Requires `statistics` plugin)* |
 | "Battery" | `quick_battery.png` | Opens advanced runtime statistics modules. *(Requires `batterystat` plugin)* |
 | "FileBrowser+" | `quick_filebrowser.png` | Activates background HTTP server bindings via PID checks. *(Requires plugin)* |
+| "RSS" | `quick_rss.png` | Opens the built-in RSS feed reader and article aggregator. *(Requires `newsdownloader` plugin)* |
+| "OPDS" | `quick_opds.png` | Launches the catalog catalog browser for local or remote OPDS servers. |
+| "KOSync" | `quick_kosync.png` | Triggers background synchronization with the KOReader progress server. |
+| "Puzzle" | `quick_puzzle.png` | Launches the built-in picture slider or sliding block puzzle game. *(Requires `puzzle` plugin)* |
+| "Crossword" | `quick_crossword.png` | Launches the offline digital crossword puzzle environment. *(Requires `crossword` plugin)* |
+| "NYT Connections" | `quick_connections.png` | Opens the custom word-grouping puzzle adaptation. *(Requires `connections` plugin)* |
+| "Chess" | `quick_chess.png` | Opens the main classic interactive board application interface. *(Requires `chess` plugin)* |
+| "Casual Chess" | `quick_casual_chess.png` | Alternative direct shortcut to friendly or locally saved chess profiles. |
+| "Frontlight Control" | *(ZenSlider / Built-in)* | Interactive horizontal slider to increment/decrement screen brightness percentage. |
+| "Warmth Control" | *(ZenSlider / Built-in)* | Interactive horizontal slider to adjust amber warm-light levels. *(Hardware Dependent)* |
+| "Font Size" | *(ZenSlider / Built-in)* | Quick increment adjustments (+/-) for active document typesetting font scaling. |
 
 ---
 
